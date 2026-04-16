@@ -21,12 +21,12 @@
         <field name="arch" type="xml">
             <form string="Solicitud Interna">
                 <header>
-                    <button name="action_enviar" string="Enviar" type="object" states="borrador" class="oe_highlight"/>
-                    <button name="action_aprobar" string="Aprobar" type="object" states="enviada" class="oe_highlight"/>
-                    <button name="action_procesar" string="Procesar" type="object" states="aprobada" class="oe_highlight"/>
-                    <button name="action_completar" string="Completar" type="object" states="en_proceso" class="oe_highlight"/>
-                    <button name="action_cancelar" string="Cancelar" type="object" states="borrador,enviada,aprobada"/>
-                    <button name="action_borrador" string="Regresar a Borrador" type="object" states="cancelada"/>
+                    <button name="action_enviar" string="Enviar" type="object" invisible="estado != 'borrador'" class="oe_highlight"/>
+                    <button name="action_aprobar" string="Aprobar" type="object" invisible="estado != 'enviada'" class="oe_highlight"/>
+                    <button name="action_procesar" string="Procesar" type="object" invisible="estado != 'aprobada'" class="oe_highlight"/>
+                    <button name="action_completar" string="Completar" type="object" invisible="estado != 'en_proceso'" class="oe_highlight"/>
+                    <button name="action_cancelar" string="Cancelar" type="object" invisible="estado not in ('borrador','enviada','aprobada')"/>
+                    <button name="action_borrador" string="Regresar a Borrador" type="object" invisible="estado != 'cancelada'"/>
                     <field name="estado" widget="statusbar" statusbar_visible="borrador,enviada,aprobada,en_proceso,completada"/>
                 </header>
                 <sheet>
@@ -45,12 +45,12 @@
                     <group string="Descripción">
                         <field name="descripcion" nolabel="1" placeholder="Describe tu solicitud..."/>
                     </group>
-                    <group string="Respuesta" attrs="{'invisible': [('estado', '=', 'borrador')]}">
+                    <group string="Respuesta" invisible="estado == 'borrador'">
                         <field name="respuesta" nolabel="1"/>
                         <field name="fecha_respuesta" readonly="1"/>
                         <field name="usuario_respuesta_id" readonly="1"/>
                     </group>
-                    <group string="Aprobación" attrs="{'invisible': [('estado', 'in', ('borrador', 'enviada'))]}">
+                    <group string="Aprobación" invisible="estado in ('borrador','enviada')">
                         <field name="aprobador_id" readonly="1"/>
                         <field name="fecha_aprobacion" readonly="1"/>
                     </group>
