@@ -7,7 +7,7 @@
         Permite registrar y gestionar solicitudes internas para los departamentos de:
         - IT (Soporte Técnico)
         - RRHH (Recursos Humanos)
-        - Compras (Adquisiciones)
+        - Compras (Adquisiciones 1)
     ''',
     'author': 'Rafael Martín',
     'license': 'AGPL-3',
