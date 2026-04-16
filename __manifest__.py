@@ -9,7 +9,7 @@
         - RRHH (Recursos Humanos)
         - Compras (Adquisiciones)
     ''',
-    'author': 'Academy Odoo',
+    'author': 'Rafael Martín',
     'license': 'AGPL-3',
     'depends': ['base'],
     'data': [
