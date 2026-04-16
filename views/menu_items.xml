@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="menu_solicitud_root" model="ir.ui.menu">
+        <field name="name">Solicitudes Internas</field>
+        <field name="action">action_solicitud</field>
+    </record>
+
+    <record id="menu_solicitud_it" model="ir.ui.menu">
+        <field name="name">IT</field>
+        <field name="parent_id" ref="menu_solicitud_root"/>
+        <field name="action" ref="action_solicitud_it"/>
+    </record>
+
+    <record id="menu_solicitud_rrhh" model="ir.ui.menu">
+        <field name="name">RRHH</field>
+        <field name="parent_id" ref="menu_solicitud_root"/>
+        <field name="action" ref="action_solicitud_rrhh"/>
+    </record>
+
+    <record id="menu_solicitud_compras" model="ir.ui.menu">
+        <field name="name">Compras</field>
+        <field name="parent_id" ref="menu_solicitud_root"/>
+        <field name="action" ref="action_solicitud_compras"/>
+    </record>
+</odoo>
