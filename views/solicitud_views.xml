@@ -11,7 +11,7 @@
                 <field name="fecha_solicitud"/>
                 <field name="prioridad"/>
                 <field name="estado"/>
-            </tree>
+            </list>
         </field>
     </record>
 
