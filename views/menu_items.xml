@@ -2,7 +2,7 @@
 <odoo>
     <record id="menu_solicitud_root" model="ir.ui.menu">
         <field name="name">Solicitudes Internas</field>
-        <field name="action">action_solicitud</field>
+        <field name="action" ref="action_solicitud"/>
     </record>
 
     <record id="menu_solicitud_it" model="ir.ui.menu">
