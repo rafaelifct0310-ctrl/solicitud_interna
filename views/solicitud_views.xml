@@ -4,6 +4,7 @@
     <record id="view_solicitud_interna_search" model="ir.ui.view">
         <field name="name">solicitud.interna.search</field>
         <field name="model">solicitud.interna</field>
+        <field name="type">search</field>
         <field name="arch" type="xml">
             <search string="Buscar Solicitudes">
                 <field name="name"/>
