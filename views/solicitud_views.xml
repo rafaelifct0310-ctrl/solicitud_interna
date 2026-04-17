@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- 1. VISTA DE LISTA (Odoo 19 usa <list>) -->
-    <record id="view_solicitud_list" model="ir.ui.view">
-        <field name="name">solicitud.interna.list</field>
-        <field name="model">solicitud.interna</field>
-        <field name="arch" type="xml">
-            <list string="Solicitudes" decoration-success="estado=='completada'" decoration-warning="estado=='en_proceso'" decoration-info="estado=='enviada'">
-                <field name="name"/>
-                <field name="tipo"/>
-                <field name="solicitante_id"/>
-                <field name="fecha_solicitud"/>
-                <field name="prioridad"/>
-                <field name="estado" widget="badge" decoration-success="estado == 'completada'" decoration-info="estado == 'enviada'"/>
-            </list>
-        </field>
-    </record>
-
-    <!-- 2. VISTA DE BÚSQUEDA (Debe estar antes de las acciones) -->
-    <record id="view_solicitud_search" model="ir.ui.view">
+    <!-- 1. VISTA DE BÚSQUEDA (Siempre primero) -->
+    <record id="view_solicitud_interna_search" model="ir.ui.view">
         <field name="name">solicitud.interna.search</field>
         <field name="model">solicitud.interna</field>
         <field name="arch" type="xml">
@@ -25,6 +9,7 @@
                 <field name="name"/>
                 <field name="solicitante_id"/>
                 <field name="tipo"/>
+                <filter string="Mis Solicitudes" name="my_requests" domain="[('solicitante_id', '=', uid)]"/>
                 <group expand="0" string="Agrupar por">
                     <filter string="Tipo" name="grupo_tipo" context="{'group_by': 'tipo'}"/>
                     <filter string="Estado" name="grupo_estado" context="{'group_by': 'estado'}"/>
@@ -33,40 +18,23 @@
         </field>
     </record>
 
-    <!-- 3. ACCIÓN PRINCIPAL (Asegurando la referencia al search) -->
-    <record id="action_solicitud" model="ir.actions.act_window">
-        <field name="name">Todas las Solicitudes</field>
-        <field name="res_model">solicitud.interna</field>
-        <field name="view_mode">list,form,kanban</field>
-        <field name="search_view_id" ref="view_solicitud_search"/>
-        <field name="context">{'search_default_grupo_estado': 1}</field>
-    </record>
-
-    <!-- 4. VISTA KANBAN (Simplificada para evitar errores de renderizado) -->
-    <record id="view_solicitud_kanban" model="ir.ui.view">
-        <field name="name">solicitud.interna.kanban</field>
+    <!-- 2. VISTA DE LISTA -->
+    <record id="view_solicitud_interna_list" model="ir.ui.view">
+        <field name="name">solicitud.interna.list</field>
         <field name="model">solicitud.interna</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="estado">
+            <list string="Solicitudes" decoration-info="estado=='enviada'" decoration-success="estado=='completada'">
                 <field name="name"/>
-                <field name="estado"/>
-                <templates>
-                    <t t-name="card">
-                        <div class="oe_kanban_global_click">
-                            <div class="oe_kanban_details">
-                                <strong class="o_kanban_record_title"><field name="name"/></strong>
-                                <div><field name="tipo"/></div>
-                                <div>Prioridad: <field name="prioridad"/></div>
-                            </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
+                <field name="solicitante_id" widget="many2one_avatar_user"/>
+                <field name="tipo"/>
+                <field name="fecha_solicitud"/>
+                <field name="estado" widget="badge"/>
+            </list>
         </field>
     </record>
 
-    <!-- VISTA FORMULARIO (Sin cambios críticos, solo cierre de etiquetas) -->
-    <record id="view_solicitud_form" model="ir.ui.view">
+    <!-- 3. VISTA DE FORMULARIO -->
+    <record id="view_solicitud_interna_form" model="ir.ui.view">
         <field name="name">solicitud.interna.form</field>
         <field name="model">solicitud.interna</field>
         <field name="arch" type="xml">
@@ -74,19 +42,20 @@
                 <header>
                     <button name="action_enviar" string="Enviar" type="object" invisible="estado != 'borrador'" class="oe_highlight"/>
                     <button name="action_aprobar" string="Aprobar" type="object" invisible="estado != 'enviada'" class="oe_highlight"/>
-                    <button name="action_procesar" string="Procesar" type="object" invisible="estado != 'aprobada'" class="oe_highlight"/>
                     <button name="action_completar" string="Completar" type="object" invisible="estado != 'en_proceso'" class="oe_highlight"/>
-                    <button name="action_cancelar" string="Cancelar" type="object" invisible="estado not in ('borrador','enviada','aprobada')"/>
                     <field name="estado" widget="statusbar" statusbar_visible="borrador,enviada,aprobada,en_proceso,completada"/>
                 </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
                     <group>
                         <group>
-                            <field name="name" readonly="1"/>
-                            <field name="tipo"/>
                             <field name="solicitante_id" readonly="1"/>
+                            <field name="tipo"/>
                         </group>
                         <group>
+                            <field name="fecha_solicitud" readonly="1"/>
                             <field name="prioridad"/>
                         </group>
                     </group>
@@ -95,6 +64,17 @@
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <!-- 4. ACCIÓN -->
+    <record id="action_solicitud_interna" model="ir.actions.act_window">
+        <field name="name">Solicitudes Internas</field>
+        <field name="res_model">solicitud.interna</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_solicitud_interna_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crea tu primera solicitud interna</p>
         </field>
     </record>
 </odoo>
